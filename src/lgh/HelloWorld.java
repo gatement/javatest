@@ -37,13 +37,13 @@ public class HelloWorld {
         //}
 
         // FIND
-        //FindIterable<Document> iterable = db.getCollection("restaurants").find(or(eq("cuisine", "Italian"), eq("address.zipcode", "10075"))).sort(orderBy(ascending("borough", "address.zipcode"), descending("restaurant_id")));
-        //iterable.forEach(new Block<Document>() {
-        //   @Override
-        //   public void apply(final Document document) {
-        //       System.out.println(document);
-        //   }
-        //});
+        FindIterable<Document> iterable = db.getCollection("restaurants").find(or(eq("cuisine", "Italian"), eq("address.zipcode", "10075"))).sort(orderBy(ascending("borough", "address.zipcode"), descending("restaurant_id")));
+        iterable.forEach(new Block<Document>() {
+           @Override
+           public void apply(final Document document) {
+               System.out.println(document);
+           }
+        });
         
 
         // UPDATE
@@ -75,11 +75,11 @@ public class HelloWorld {
         //});
 
         // INDEX
-        String indexResult = db.getCollection("restaurants").createIndex(new Document("cuisine", 1).append("address.zipcode", -1));
-        System.out.print("Index name: ");
-        System.out.println(indexResult);
+        //String indexResult = db.getCollection("restaurants").createIndex(new Document("cuisine", 1).append("address.zipcode", -1));
+        //System.out.print("Index name: ");
+        //System.out.println(indexResult);
 
-        System.out.println("donex");
+        System.out.println("done");
     }
 
     private static void insertOne(MongoDatabase db) throws ParseException {
