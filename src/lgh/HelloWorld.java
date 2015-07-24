@@ -5,7 +5,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Channel;
 
-
 public class HelloWorld {
     public static void main(String[] args) throws IOException{
         System.out.println("start");
