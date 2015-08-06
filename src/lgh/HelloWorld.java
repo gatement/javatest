@@ -31,6 +31,7 @@ public class HelloWorld {
 
             channel.queueDeclare(queueName, true, false, false, null);
             channel.queueBind(queueName, exchangeName, routingKey);
+            channel.basicQos(1, true);
 
             boolean autoAck = false;
             channel.basicConsume(queueName, autoAck, new DefaultConsumer(channel) {
@@ -41,18 +42,26 @@ public class HelloWorld {
 
                     System.out.print("routingKey: ");
                     System.out.println(routingKey);
+
                     System.out.print("body: ");
-                    System.out.println(new String(body));
+                    String bodyStr = new String(body);
+                    System.out.println(bodyStr);
                     System.out.println();
 
                     long deliveryTag = envelope.getDeliveryTag();
                     channel.basicAck(deliveryTag, false);
+
+                    if(bodyStr.equals("exception")) {
+                        System.out.println("======exception=======");
+                        //int a = 1/0;
+                        throw new IOException("my io exception");
+                    }
                 }
                 @Override
                 public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) 
                 {
                     System.out.println("consumer exception occured!");
-                    //sig.printStackTrace();
+                    sig.printStackTrace();
                 }
             });
 
