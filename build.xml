@@ -1,10 +1,11 @@
-<project name="HelloWorld" basedir="." default="main">
+<project name="HelloWorld" basedir="." default="compile">
     <property name="src.dir" value="src"/>
     <property name="lib.dir" value="lib"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir" value="${build.dir}/jar"/>
-    <property name="main-class" value="lgh.HelloWorld"/>
+    <property name="main-class-producer" value="lgh.MyProducer"/>
+    <property name="main-class-consumer" value="lgh.MyConsumer"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
@@ -27,8 +28,17 @@
         </jar>
     </target>
 
-    <target name="run" depends="jar">
-        <java classname="${main-class}" fork="true">
+    <target name="run-producer" depends="jar">
+        <java classname="${main-class-producer}" fork="true">
+            <classpath>
+                <path refid="classpath" />
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-consumer" depends="jar">
+        <java classname="${main-class-consumer}" fork="true">
             <classpath>
                 <path refid="classpath" />
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
@@ -37,7 +47,4 @@
     </target>
 
     <target name="clean-build" depends="clean,jar"/>
-
-    <target name="main" depends="clean,run"/>
-    <target name="com" depends="compile"/>
 </project>

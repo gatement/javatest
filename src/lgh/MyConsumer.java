@@ -11,14 +11,13 @@ import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.ShutdownSignalException;
 
 // RabbitMQ 3.4.2
-public class HelloWorld {
+public class MyConsumer {
     public static void main(String[] args) {
         System.out.println("start");
 
+        //String connStr = "amqp://aos:AOSmith@m2mv4.iotsdk.com:5672/%2f";
         String connStr = "amqp://guest:guest@localhost:5672/%2f";
-        String exchangeName = "amq.topic";
-        String queueName = "testQueue1";
-        String routingKey = "a.b"; // msg topic
+        String queueName = "testQueue2";
 
         try {
             ConnectionFactory factory = new ConnectionFactory();
@@ -30,7 +29,7 @@ public class HelloWorld {
             Channel channel = conn.createChannel();
 
             channel.queueDeclare(queueName, true, false, false, null);
-            channel.queueBind(queueName, exchangeName, routingKey);
+
             channel.basicQos(1, true);
 
             boolean autoAck = false;
@@ -38,25 +37,17 @@ public class HelloWorld {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException
                 {
-                    String routingKey = envelope.getRoutingKey();
-
-                    System.out.print("routingKey: ");
-                    System.out.println(routingKey);
-
                     System.out.print("body: ");
                     String bodyStr = new String(body);
                     System.out.println(bodyStr);
                     System.out.println();
 
+                    // process the msg
+
                     long deliveryTag = envelope.getDeliveryTag();
                     channel.basicAck(deliveryTag, false);
-
-                    if(bodyStr.equals("exception")) {
-                        System.out.println("======exception=======");
-                        //int a = 1/0;
-                        throw new IOException("my io exception");
-                    }
                 }
+
                 @Override
                 public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) 
                 {
@@ -65,7 +56,7 @@ public class HelloWorld {
                 }
             });
 
-            Thread.sleep(1000000);
+            Thread.sleep(1000000000);
 
             channel.close();
             conn.close();
