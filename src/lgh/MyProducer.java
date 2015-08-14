@@ -15,7 +15,6 @@ public class MyProducer {
     public static void main(String[] args) {
         System.out.println("start");
 
-        //String connStr = "amqp://aos:AOSmith@m2mv4.iotsdk.com:5672/%2f";
         String connStr = "amqp://guest:guest@localhost:5672/%2f";
         String queueName = "testQueue2";
 
