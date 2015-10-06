@@ -13,6 +13,7 @@
         <mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false">
             <compilerarg value="-Xlint"/>
+            <compilerarg value="-Xdiags:verbose"/>
         </javac>
     </target>
     <target name="jar" depends="compile">
