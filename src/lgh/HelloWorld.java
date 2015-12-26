@@ -7,6 +7,7 @@ public class HelloWorld {
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
         System.out.println("==start");
+        System.out.println(Class1.test());
 
         List<Integer> li = Arrays.asList(1, 2, 3);
         List<String>  ls = Arrays.asList("one", "two", "three");
@@ -21,9 +22,4 @@ public class HelloWorld {
             System.out.print(elem + " ");
         System.out.println();
     }
-
-    void foo(List<?> i) {
-        i.set(0, i.get(0));
-    }
-    
 }
