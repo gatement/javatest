@@ -1,25 +1,37 @@
 package lgh;
 
-import java.util.List;
-import java.util.Arrays;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.Statement;
 
 public class HelloWorld {
     @SuppressWarnings("deprecation")
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("==start");
-        System.out.println(Class1.test());
 
-        List<Integer> li = Arrays.asList(1, 2, 3);
-        List<String>  ls = Arrays.asList("one", "two", "three");
-        printList(li);
-        printList(ls);
+        Connection conn = null;
+        String sql;
+        String url = "jdbc:mysql://local:3306/test?user=root&password=&useUnicode=true&characterEncoding=UTF-8";
+
+        try{
+            // com.mysql.jdbc.Driver driver = new com.mysql.jdbc.Driver();
+            // OR 
+            // new com.mysql.jdbc.Driver();
+            // OR
+            Class.forName("com.mysql.jdbc.Driver");
+
+            System.out.println("MySQl Driver loaded.");
+        //} catch (SQLException e) {
+        //    System.out.println("SQL Exception");
+        } catch (Exception e) {
+            //System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (conn != null) conn.close();
+        }
 
         System.out.println("==end");
-    }
-
-    public static void printList(List<?> list) {
-        for (Object elem: list)
-            System.out.print(elem + " ");
-        System.out.println();
     }
 }
