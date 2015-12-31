@@ -36,7 +36,11 @@
         </java>
     </target>
     <target name="run-quickly" depends="compile">
-        <java classpath="${classes.dir}" classname="${main-class}" fork="false"/>
+        <java classpath="${classes.dir}" classname="${main-class}" fork="false">
+            <classpath>
+                <path refid="classpath" />
+            </classpath>
+        </java>
     </target>
     <target name="clean-build" depends="clean,jar"/>
     <target name="main" depends="run-quickly"/>
