@@ -28,7 +28,7 @@
         <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
     </target>
     <target name="run-quickly" depends="compile">
-        <java classpath="${classes.dir}" classname="${main-class}" fork="false"/>
+        <java classpath="${classes.dir}" classname="${main-class}" fork="true"/>
     </target>
     <target name="clean-build" depends="clean,jar"/>
     <target name="main" depends="run-quickly"/>
