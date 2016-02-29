@@ -42,6 +42,15 @@
             </classpath>
         </java>
     </target>
+    <target name="junit" depends="compile">
+        <java classpath="${classes.dir}" classname="org.junit.runner.JUnitCore" fork="false">
+            <arg value="CalculatorTest"/>
+            <arg value="CalculatorTest2"/>
+            <classpath>
+                <path refid="classpath" />
+            </classpath>
+        </java>
+    </target>
     <target name="clean-build" depends="clean,jar"/>
     <target name="main" depends="run-quickly"/>
     <target name="com" depends="compile"/>
