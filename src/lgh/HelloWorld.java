@@ -1,66 +1,79 @@
 package lgh;
 
-import java.lang.Thread;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.ThreadContext;
-import lgh.UniqueThreadIdGenerator;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 public class HelloWorld
 {
-    static String loggerName = null;
-    private static final Logger logger = LogManager.getLogger(HelloWorld.class);
-    private static String name = "Johnson";
-    private static int age = 22;
-
     public static void main(String[] args) throws Exception
     {
         System.out.println("==start");
-        logger.entry(name, age);
 
-        ThreadContext.put("profiling.requestStart.millis", String.valueOf(System.currentTimeMillis()));
+        String jsonStr = " { \"event_type\": \"device_status_kv\", \"did\": \"FrAqGn2LDJrBwHQTHJJ8nm\", \"created_at\": 1458604290.718, \"product_key\": \"e702032d839a4d989cebe11d9bd3f264\", \"mac\": \"accf236c6c42\", \"group_id\": null, \"data\": { \"str\": \"johnson\", \"number\": 12.5, \"integer\": 23, \"boolean\": true, \"null\": null } }";
+        JSONObject json = new JSONObject(jsonStr);
 
-        logger.info("Hello, {} ({})!", name, age);
-        logger.info("Hello, {}!", () -> getName());
-        logger.printf(Level.ERROR, "a b %1$s %1$s %2$d, %3$,d", name, age, Integer.MAX_VALUE);
+        String typeName = json.getString("event_type"); // event_type as elasticsearch type name
+        System.out.println(typeName);
 
+        // transform data field
+        JSONObject dataObj = json.getJSONObject("data");
+        json.remove("data");
+        System.out.println(json.toString());
 
-        MyLib.doIt(name, age);
-        //while(true)
-        //{
-        //    logger.info("tick");
-        //    Thread.sleep(1000);
-        //}
+        JSONArray dataArray = new JSONArray();
+        String[] keys = JSONObject.getNames(dataObj);
+        for(String key : keys)
+        {
+            Object value = dataObj.get(key);
 
-        new ReceiveThread().start();
-        new SendThread().start();
+            if (dataObj.isNull(key))
+            {
+                dataArray.put(new JSONObject().put("key", key).put("value_null", value));
+            }
+            else
+            {
+                String type = getType(value);
+                switch (type)
+                {
+                    case "str":
+                        dataArray.put(new JSONObject().put("key", key).put("value_str", value));
+                        break;
+                    case "num":
+                        dataArray.put(new JSONObject().put("key", key).put("value_num", value));
+                        break;
+                    case "bool":
+                        dataArray.put(new JSONObject().put("key", key).put("value_bool", value));
+                        break;
+                    default:
+                        System.out.println("unknown type");
+                        break;
+                }
+            }
+        }
 
-        Thread.sleep(1000);
-        logger.exit(true);
+        json.put("data", dataArray);
+        System.out.println(json.toString());
+
         System.out.println("==end");
     }
 
-    private static String getName()
+    public static <T> String getType(T t)
     {
-        return name;
+        if(t instanceof String)
+        { 
+            return "str"; 
+        }
+        else if(t instanceof Number)
+        { 
+            return "num"; 
+        }
+        else if(t instanceof Boolean)
+        { 
+            return "bool"; 
+        }
+        else
+        { 
+            return "unknown"; 
+        }
     }
-
-	static class ReceiveThread extends Thread
-    {
-		@Override
-		public void run() 
-        {
-            logger.info("ReceiveThread id: {}!", () -> UniqueThreadIdGenerator.getCurrentThreadId());
-		}
-	}
-
-	static class SendThread extends Thread
-    {
-		@Override
-		public void run() 
-        {
-            logger.info("SendThread id: {}!", () -> UniqueThreadIdGenerator.getCurrentThreadId());
-		}
-	}
 }
