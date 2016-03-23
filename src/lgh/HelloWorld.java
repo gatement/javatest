@@ -13,7 +13,11 @@ public class HelloWorld
         
 
         Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //cal.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+
         cal.setMinimalDaysInFirstWeek(4);
         Date date = cal.getTime();
 
