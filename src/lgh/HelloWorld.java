@@ -9,7 +9,7 @@ public class HelloWorld
     {
         System.out.println("==start");
 
-        String jsonStr = " { \"event_type\": \"device_status_kv\", \"did\": \"FrAqGn2LDJrBwHQTHJJ8nm\", \"created_at\": 1458604290.718, \"product_key\": \"e702032d839a4d989cebe11d9bd3f264\", \"mac\": \"accf236c6c42\", \"group_id\": null, \"data\": { \"str\": \"johnson\", \"number\": 12.5, \"integer\": 23, \"boolean\": true, \"null\": null } }";
+        String jsonStr = " { \"event_type\": \"device_status_kv\", \"did\": \"FrAqGn2LDJrBwHQTHJJ8nm\", \"created_at\": 1458604290.718, \"product_key\": \"e702032d839122344555551d9bd3f264\", \"mac\": \"accf236c6c42\", \"group_id\": null, \"data\": { \"str\": \"johnson\", \"number\": 12.5, \"integer\": 23, \"boolean\": true, \"null\": null } }";
         JSONObject json = new JSONObject(jsonStr);
 
         String typeName = json.getString("event_type"); // event_type as elasticsearch type name
