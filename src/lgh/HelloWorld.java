@@ -26,6 +26,9 @@ public class HelloWorld
         {
             Object value = dataObj.get(key);
 
+            String[] valueTypeNames = value.getClass().getName().split("\\.");
+            System.out.println(valueTypeNames[valueTypeNames.length - 1]);
+
             if (dataObj.isNull(key))
             {
                 dataArray.put(new JSONObject().put("key", key).put("value_null", value));
