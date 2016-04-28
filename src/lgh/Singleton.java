@@ -1,7 +1,7 @@
 package lgh;
 
 public class Singleton {
-    private static Singleton singleton = null;
+    private static volatile Singleton singleton = null;
     private String name;
 
     private Singleton() {}
@@ -9,7 +9,11 @@ public class Singleton {
     public static Singleton getSingleton()
     {
         if (singleton == null)
-            singleton = new Singleton();
+            synchronized (Singleton.class)
+            {
+                if (singleton == null)
+                    singleton = new Singleton();
+            }
 
         return singleton; 
     }
